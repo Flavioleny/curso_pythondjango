@@ -1,7 +1,5 @@
 #Calcular Metros em Pes
 class Converter(object):   
-    def _init_(self,altura):
-        self.altura = altura
 
     def Pes(self,altura): 
         self.altura = 3.28 * altura
