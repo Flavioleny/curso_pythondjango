@@ -1,12 +1,20 @@
 #Calcular capacidade maxima de pessoas dentro de uma sala
+#Ad –área disponível da sala (m2)
+#Ep –espaço requerido por pessoas na sala(m2/ocupante)
+
 class Capacidade(object):
-    v_total = 3.28
-    altura= 0
+    capacidade = 0   
+    
+    def __init__(self, area, espaco):
+        self.area  = area
+        self.espaco= espaco
+    
+    def calculo(self):
+        self.capacidade = self.area / self.espaco
+        print("Capacidade maxima de pessoas na sala e = " + str(self.capacidade))
 
-    def _init_(self,altura):
-        self.altura = v_pes * altura
+v_ad = float(input("Digite a Area disponivel da sala(m2): "))
+v_ep = float(input("Digite o espaço requerido por pessoas na sala(m2): "))
 
-v_altura = float(input("Digite a altura da pessoa: "))
-c = Converter()
-c.altura = v_altura
-print("A altura da pessoa em Pes e = ", c.altura)
+c = Capacidade(v_ad,v_ep)
+c.calculo()
