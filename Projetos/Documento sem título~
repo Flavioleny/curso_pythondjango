@@ -1,0 +1,7 @@
+virtualenv -p /usr/bin/python3.4 vagenda --> Criar ambiente
+cd vagenda --> Entrar dentro da pasta do ambiente
+source bin/activate --> Ativar ambiente
+pip install django -->Instalar django
+django-admin startproject agenda . -->Criar projeto agenda, o ponto criar os arquivos na mesma pasta
+./manage.py runserver --> Executar o servidor Web
+./manage.py migrate --> Gerar as tabela(Sql) do admin

@@ -1,0 +1,93 @@
+---Terminal---
+virtualenv -p /usr/bin/python3.4 vagenda --> Criar ambiente
+cd vagenda --> Entrar dentro da pasta do ambiente
+source bin/activate --> Ativar ambiente
+pip install django -->Instalar django
+django-admin startproject agenda . -->Criar projeto agenda, o ponto criar os arquivos na mesma pasta
+./manage.py runserver --> Executar o servidor Web
+./manage.py migrate --> Gerar as tabela(Sql) do admin
+
+---Configurando o sublimetext3---
+Copiar o script abaixo em View/Show Console e Enter
+
+import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) 
+
+control shif P
+--> install package
+    html5
+    django
+    djaneiro
+--> remove package
+
+---Terminal---
+---Criando a aplicação contatos---
+cd agenda --> Entrar dentro da agenda
+../manage.py startapp contatos --> Criar aplicação contatos
+
+---Sublime---
+Abrir a pasta do projeto
+Criar a classe[Contato] no arquivo models.py
+class Contato(models.Model):
+	nome = models.CharField(max_length=100)
+	email = models.CharField(max_length=100)
+	telefone = models.CharField(max_length=14)
+
+	def  __str__(self):
+		return self.nome
+
+---Terminal---
+../manage.py makemigrations --> Preparar os models para geração dos SQL
+../manage.py migrate --> Gerar as tabela(Sql) de contato
+
+---Sublime---
+Abrir o arquivo admin.py e editar o código abaixo:
+from .models import Contato
+
+# Register your models here.
+
+#@admin.register(Contato)
+class ContatoAdmin(admin.ModelAdmin):
+	list_display = ('nome','email','telefone','sexo','cidade')
+	search_fields = ('nome','email')
+
+admin.site.register(Contato, ContatoAdmin)
+
+---Terminal---
+../manage.py createsuperuser --> Criar um super usuario para acessar o admin da aplicação
+../manage.py runserver --> Executar o servidor Web
+
+---Terminal---
+Criando nova aplicação para controle
+../manage.py startapp core -->
+
+---Sublime---
+Criar a pasta template no core
+criar o arquivo index.html com texto abaixo:
+<<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+<h1>Bem Vindo!</h1>
+</body>
+</html>
+
+---Editar o arquivo views.py do core como abaixo:
+def home(request):
+	return render(request, 'index.html')
+
+---Editar o arquivo urls.py do core como abaixo:
+from django.conf.urls import include, url
+from django.contrib import admin
+
+from agenda.core.views import home
+
+urlpatterns = [
+    url(r'^$', home, name='home'),
+    url(r'^admin/', include(admin.site.urls)),
+]
+
