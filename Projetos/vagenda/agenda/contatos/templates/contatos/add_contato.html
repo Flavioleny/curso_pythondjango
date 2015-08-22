@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+    Cadastro de Contato
+{% endblock titulo %}
+
+
+{% block corpo %}
+
+    <h1>Novo Contato</h1>
+    <form action="" method="post" accept-charset="utf-8">
+    {% csrf_token %}
+	    {{ form_contato.as_p }}
+	    <input type="submit" name="" value="Salvar Contato">
+    </form>	
+
+{% endblock corpo %}

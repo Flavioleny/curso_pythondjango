@@ -1,0 +1,145 @@
+---Otimização do Projeto Agenda--- refatorar o código ---
+---Criar arquivo urls.py na pasta core---
+from django.conf.urls import include, url
+
+from agenda.core.views import home
+
+urlpatterns = [
+    url(r'^$', home, name='home'),
+]
+
+--editar o arquivo urls.py principal---
+"""agenda URL Configuration
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/1.8/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
+Including another URLconf
+    1. Add an import:  from blog import urls as blog_urls
+    2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
+"""
+from django.conf.urls import include, url
+from django.contrib import admin
+
+from agenda.core import urls as core_urls
+from agenda.contatos import urls as contatos_urls
+
+#from agenda.core.views import home
+#from agenda.contatos.views import add_contato
+#from agenda.contatos.views import cadastro_sucesso
+#from agenda.contatos.views import lista_contatos
+#from agenda.contatos.views import apagar_contato
+#from agenda.contatos.views import editar_contato
+
+urlpatterns = [
+    url(r'', include(core_urls, namespace='core')),
+    url(r'^contato/', include(contatos_urls, namespace='contato')),
+
+    #url(r'^$', home, name='home'),
+    #url(r'^adicionar-contato/$', add_contato, name='addcontato'),
+    #url(r'^sucesso/$', cadastro_sucesso, name='sucesso'),
+    #url(r'^lista-contatos/$', lista_contatos, name='listacontatos'),
+    #url(r'^deletar-contatos/(?P<id>\d+)/$', apagar_contato, name='apagarcontatos'),
+    #url(r'^editar-contatos/(?P<id>\d+)/$', editar_contato, name='editarcontatos'),
+    url(r'^admin/', include(admin.site.urls)),
+]
+
+---Criar arquivo urls.py na pasta contatos---
+from django.conf.urls import url
+
+from agenda.contatos.views import add_contato
+from agenda.contatos.views import cadastro_sucesso
+from agenda.contatos.views import lista_contatos
+from agenda.contatos.views import apagar_contato
+from agenda.contatos.views import editar_contato
+
+urlpatterns = [
+    url(r'^adicionar-contato/$', add_contato, name='addcontato'),
+    url(r'^sucesso/$', cadastro_sucesso, name='sucesso'),
+    url(r'^lista-contatos/$', lista_contatos, name='listacontatos'),
+    url(r'^deletar-contatos/(?P<id>\d+)/$', apagar_contato, name='apagarcontatos'),
+    url(r'^editar-contatos/(?P<id>\d+)/$', editar_contato, name='editarcontatos'),   
+]
+
+---Alterar todo o projetos para as chamadas dos apps e paginas---
+---exemplo---
+de 'addcontato' para 'contato:addcontato'
+de reverse('listacontatos') para reverse('contato:listacontatos')
+
+---Refatoração de HTML---
+---Criar uma pasta para cada apps com o mesmo nome e copiar os arquivos html para dentro da pasta---
+---Alterar no projeto as chamadas dos arquivos html como mostra exemplo abaixo:
+de lista_contatos.html para contatos/lista_contatos.html
+
+---Criar arquivo base.html na pasta core/template---
+---Recortar o conteudo do arquivo index.html e colar no arquivo base.html
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+<h1>Bem Vindo!</h1>
+<a href="{% url 'addcontato' %}" title="">Cadastrar Contato</a><br>
+<a href="{% url 'listacontatos' %}" title="">Listar Contato</a>
+</body>
+</html>
+
+---Editar o arquivo index.html---
+{% extends "base.html" %}
+{% block corpo %}
+    <h1>Bem Vindo!</h1>
+    <a href="{% url 'contato:addcontato' %}" title="">Cadastrar Contato</a><br>
+    <a href="{% url 'contato:listacontatos' %}" title="">Listar Contato</a>
+{% endblock corpo %}
+
+---Alterar o arquivo base.html---
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<title>{% block titulo %}Agenda de Contato em Django{% endblock titulo %}</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}">
+</head>
+<body>
+    <div class="container">
+        {% block corpo %}
+         
+        {% endblock corpo %}
+    </div>
+<script src="{% static "js/jquery.min.css" %}" type="text/javascript" charset="utf-8" async defer></script>
+</body>
+</html>
+
+---Editar o arquivo index.html pela nova estrutura abaixo:---
+{% extends "base.html" %}
+{% block corpo %}
+    <h1>Bem Vindo!</h1>
+    <a href="{% url 'contato:addcontato' %}" title="">Cadastrar Contato</a><br>
+    <a href="{% url 'contato:listacontatos' %}" title="">Listar Contato</a>
+{% endblock corpo %}
+
+---Editar todos os arquivos html menos base e index para a novo estrutura baixo:---
+{% extends "base.html" %}
+
+{% block titulo %}
+	{{ block.super }} - Sucesso!
+{% endblock titulo %}
+
+
+{% block corpo %}
+	<h1>Cadastro efetuado com sucesso!</h1>
+	<a href="{% url 'contato:addcontato' %}" title="">Efetuar novo Cadastro</a>
+{% endblock corpo %}
+
+

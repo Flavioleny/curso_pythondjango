@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block corpo %}
+    <h1>Bem Vindo!</h1>
+    <a href="{% url 'contato:addcontato' %}" title="">Cadastrar Contato</a><br>
+    <a href="{% url 'contato:listacontatos' %}" title="">Listar Contato</a>
+{% endblock corpo %}

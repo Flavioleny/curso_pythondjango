@@ -228,4 +228,43 @@ def apagar_contato(request, id):
 	contato = Contato.objects.get(id=id).delete()
 	return redirect(reverse('listacontatos'))
 
+---Editar views.py de contatos---
+def editar_contato(request,id):
+	contato = Contato.objects.get(id=id)
+	if request.method == 'POST':
+		form_contato = ContatoForm(request.POST, instance=contato)
+		if form_contato.is_valid:
+			form_contato.save()
+			return redirect(reverse('listacontatos'))
+		else:
+			print(form_contato.errors)
+	else:
+		form_contato = ContatoForm(instance=contato)
+	return render(request, 'editar_contato.html',{'form_contato':form_contato})
+
+---Editar urls.py---
+from agenda.contatos.views import editar_contato
+url(r'^editar-contatos/(?P<id>\d+)/$', editar_contato, name='editarcontatos'),
+
+---Editar lista_contatos.py de templates contatos---
+<td><a href="{% url 'editarcontatos' c.id %}">Editar</a></td>
+
+---Criar arquivo editar_contato.html em contatos/templates---
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Adicionar novo Contato</title>
+	<meta charset="utf-8">
+</head>
+<body>
+<h1>Editar Contato</h1>
+<form action="" method="post" accept-charset="utf-8">
+{% csrf_token %}
+	{{ form_contato.as_p }}
+	<input type="submit" name="" value="Salvar Contato">
+</form>	
+</body>
+</html>
+
+
 

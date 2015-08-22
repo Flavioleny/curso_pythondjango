@@ -1,3 +1,14 @@
+---Otimização do Projeto Agenda--- refatorar o código ---
+---Criar arquivo urls.py na pasta core---
+from django.conf.urls import include, url
+
+from agenda.core.views import home
+
+urlpatterns = [
+    url(r'^$', home, name='home'),
+]
+
+--editar o arquivo urls.py principal---
 """agenda URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -38,3 +49,39 @@ urlpatterns = [
     #url(r'^editar-contatos/(?P<id>\d+)/$', editar_contato, name='editarcontatos'),
     url(r'^admin/', include(admin.site.urls)),
 ]
+
+---Criar arquivo urls.py na pasta contatos---
+from django.conf.urls import url
+
+from agenda.contatos.views import add_contato
+from agenda.contatos.views import cadastro_sucesso
+from agenda.contatos.views import lista_contatos
+from agenda.contatos.views import apagar_contato
+from agenda.contatos.views import editar_contato
+
+urlpatterns = [
+    url(r'^adicionar-contato/$', add_contato, name='addcontato'),
+    url(r'^sucesso/$', cadastro_sucesso, name='sucesso'),
+    url(r'^lista-contatos/$', lista_contatos, name='listacontatos'),
+    url(r'^deletar-contatos/(?P<id>\d+)/$', apagar_contato, name='apagarcontatos'),
+    url(r'^editar-contatos/(?P<id>\d+)/$', editar_contato, name='editarcontatos'),   
+]
+
+---Alterar todo o projetos para as chamadas dos apps e paginas---
+---exemplo---
+de 'addcontato' para 'contato:addcontato'
+de reverse('listacontatos') para reverse('contato:listacontatos')
+
+---Refatoração de HTML---
+---Criar uma pasta para cada apps com o mesmo nome e copiar os arquivos html para dentro da pasta---
+---Alterar no projeto as chamadas dos arquivos html como mostra exemplo abaixo:
+de lista_contatos.html para contatos/lista_contatos.html
+
+---Criar arquivo base.html na pasta core/template---
+---Recortar o conteudo do arquivo index.html e colar no arquivo base.html
+
+
+
+
+
+
