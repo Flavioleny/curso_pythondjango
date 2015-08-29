@@ -4,9 +4,10 @@ Projeto Mutirao
   - Nome;
   - Sobrenome;
   - Username;
+  - Senha;
   - Email;
   - Telefone;
-  - Senha;
+  - Foto (Perfil);
 - Login de usuário;
   - Username/Email;
   - Senha;
